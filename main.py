@@ -117,6 +117,7 @@ async def generate_response(history):
         "temperature": 0.9,
         "max_tokens": 500
     }
+
     async with aiohttp.ClientSession() as session:
         async with session.post(
             "https://api.groq.com/openai/v1/chat/completions",
@@ -127,12 +128,12 @@ async def generate_response(history):
             data = await resp.json()
 
             print("STATUS GROQ:", resp.status)
-            print("CAŁA ODPOWIEDŹ GROQ:", data)
+            print(data)
 
             if "choices" not in data:
-                raise Exception(f"Brak choices: {data}")
+                raise Exception(data)
 
-            return data["choices"][0]["message"]["content"].strip()
+            return data["choices"][0]["message"]["content"]
 
 # Uruchomienie
 if __name__ == "__main__":
