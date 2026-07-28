@@ -117,7 +117,6 @@ async def generate_response(history):
         "temperature": 0.9,
         "max_tokens": 500
     }
-
     async with aiohttp.ClientSession() as session:
         async with session.post(
             "https://api.groq.com/openai/v1/chat/completions",
