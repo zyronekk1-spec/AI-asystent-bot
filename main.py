@@ -111,13 +111,12 @@ async def generate_response(history):
         "Authorization": f"Bearer {GROQ_API_KEY}",
         "Content-Type": "application/json"
     }
-    payload = {
-        "model": "llama-3.3-70b-versatile",   # lub llama-3.1-8b-instant
-        "messages": messages,
-        "temperature": 0.9,
-        "max_tokens": 500
-    }
-
+payload = {
+    "model": "llama-3.1-8b-instant",
+    "messages": messages,
+    "temperature": 0.9,
+    "max_tokens": 500
+}
     async with aiohttp.ClientSession() as session:
         async with session.post(
             "https://api.groq.com/openai/v1/chat/completions",
@@ -127,10 +126,10 @@ async def generate_response(history):
 data = await resp.json()
 
 print("STATUS GROQ:", resp.status)
-print("ODPOWIEDŹ GROQ:", data)
+print("CAŁA ODPOWIEDŹ GROQ:", data)
 
 if "choices" not in data:
-    raise Exception(data)
+    raise Exception(f"Brak choices: {data}")
 
 return data["choices"][0]["message"]["content"].strip()
 
