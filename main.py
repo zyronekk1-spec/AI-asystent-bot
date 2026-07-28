@@ -7,7 +7,7 @@ import asyncio
 # ================== KONFIGURACJA ==================
 TOKEN = os.getenv("DISCORD_TOKEN")          # token bota
 CHANNEL_ID = None                           # opcjonalnie: ogranicz do jednego kanału (ID)
-MAX_HISTORY = 10                            # ile wiadomości pamięta
+MAX_HISTORY = 5                            # ile wiadomości pamięta
 
 # System prompt 
 SYSTEM_PROMPT = """
