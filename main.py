@@ -117,7 +117,7 @@ async def on_message(message):
         history = conversation_history[channel_id]
 
 
-async with message.channel.typing():
+    async with message.channel.typing():
 
         try:
 
