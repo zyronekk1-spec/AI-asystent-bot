@@ -124,8 +124,15 @@ async def generate_response(history):
             headers=headers,
             json=payload
         ) as resp:
-            data = await resp.json()
-            return data["choices"][0]["message"]["content"].strip()
+data = await resp.json()
+
+print("STATUS GROQ:", resp.status)
+print("ODPOWIEDŹ GROQ:", data)
+
+if "choices" not in data:
+    raise Exception(data)
+
+return data["choices"][0]["message"]["content"].strip()
 
 # Uruchomienie
 if __name__ == "__main__":
