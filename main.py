@@ -117,7 +117,7 @@ async def ask_ai(messages):
     headers = {
         "Authorization": f"Bearer {GROQ_API_KEY}",
         "Content-Type": "application/json"
-    }
+        }
 
 
     async with aiohttp.ClientSession() as session:
