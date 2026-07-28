@@ -98,14 +98,11 @@ async def on_message(message: discord.Message):
             await message.reply("kurwa, coś mi nie działa... spróbuj za chwilę 😔")
 
 async def generate_response(history):
-    """
-    Wysyła wiadomości do Groq API i zwraca odpowiedź.
-    """
 
     GROQ_API_KEY = os.getenv("GROQ_API_KEY")
 
     if not GROQ_API_KEY:
-        raise Exception("Brak GROQ_API_KEY")
+        raise Exception("Nie znaleziono GROQ_API_KEY")
 
     messages = [{"role": "system", "content": SYSTEM_PROMPT}] + history
 
@@ -131,7 +128,7 @@ async def generate_response(history):
             data = await resp.json()
 
             print("STATUS GROQ:", resp.status)
-            print("ODPOWIEDŹ GROQ:", data)
+            print("CAŁA ODPOWIEDŹ GROQ:", data)
 
             if "choices" not in data:
                 raise Exception(f"Brak choices: {data}")
