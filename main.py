@@ -154,94 +154,44 @@ async def generate_response(history):
 
     GROQ_API_KEY = os.getenv("GROQ_API_KEY")
 
-
     if not GROQ_API_KEY:
-        raise Exception(
-            "Brak GROQ_API_KEY"
-        )
-
+        raise Exception("Nie znaleziono GROQ_API_KEY")
 
     messages = [
-        {
-            "role": "system",
-            "content": SYSTEM_PROMPT
-        }
+        {"role": "system", "content": SYSTEM_PROMPT}
     ] + history
 
-
-
     headers = {
-
-        "Authorization":
-            f"Bearer {GROQ_API_KEY}",
-
-        "Content-Type":
-            "application/json"
+        "Authorization": f"Bearer {GROQ_API_KEY}",
+        "Content-Type": "application/json"
     }
-
-
 
     payload = {
-
-        "model":
-            "llama-3.1-8b-instant",
-
-        "messages":
-            messages,
-
-        "temperature":
-            0.8,
-
-        "max_tokens":
-            500
+        "model": "llama-3.1-8b-instant",
+        "messages": messages,
+        "temperature": 0.9,
+        "max_tokens": 500
     }
 
-
-
     async with aiohttp.ClientSession() as session:
-
-
         async with session.post(
-
             "https://api.groq.com/openai/v1/chat/completions",
-
             headers=headers,
-
             json=payload
-
         ) as resp:
-
 
             data = await resp.json()
 
-
-            print(
-                "STATUS GROQ:",
-                resp.status
-            )
-
-            print(
-                "GROQ RESPONSE:",
-                data
-            )
-
+            print("STATUS GROQ:", resp.status)
+            print("ODPOWIEDŹ GROQ:", data)
 
             if resp.status != 200:
                 raise Exception(data)
 
-
             if "choices" not in data:
-                raise Exception(
-                    f"Brak choices: {data}"
-                )
+                raise Exception(f"Brak choices: {data}")
 
-
-            return (
-                data["choices"][0]
-                ["message"]
-                ["content"]
-                .strip()
-            )
+            return data["choices"][0]["message"]["content"].strip()
 
 
 
