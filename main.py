@@ -99,11 +99,13 @@ async def on_message(message: discord.Message):
 
 async def generate_response(history):
     """
-    Używa darmowego endpointu (Groq / OpenRouter / HuggingFace).
-    Tutaj przykład z Groq (darmowy i szybki).
+    Wysyła wiadomości do Groq API i zwraca odpowiedź.
     """
-    # === GROQ (zalecane – darmowe i szybkie) ===
-    GROQ_API_KEY = os.getenv("GROQ_API_KEY")  # darmowy klucz na console.groq.com
+
+    GROQ_API_KEY = os.getenv("GROQ_API_KEY")
+
+    if not GROQ_API_KEY:
+        raise Exception("Brak GROQ_API_KEY")
 
     messages = [{"role": "system", "content": SYSTEM_PROMPT}] + history
 
@@ -111,27 +113,30 @@ async def generate_response(history):
         "Authorization": f"Bearer {GROQ_API_KEY}",
         "Content-Type": "application/json"
     }
-payload = {
-    "model": "llama-3.1-8b-instant",
-    "messages": messages,
-    "temperature": 0.9,
-    "max_tokens": 500
-}
+
+    payload = {
+        "model": "llama-3.1-8b-instant",
+        "messages": messages,
+        "temperature": 0.9,
+        "max_tokens": 500
+    }
+
     async with aiohttp.ClientSession() as session:
         async with session.post(
             "https://api.groq.com/openai/v1/chat/completions",
             headers=headers,
             json=payload
         ) as resp:
-data = await resp.json()
 
-print("STATUS GROQ:", resp.status)
-print("CAŁA ODPOWIEDŹ GROQ:", data)
+            data = await resp.json()
 
-if "choices" not in data:
-    raise Exception(f"Brak choices: {data}")
+            print("STATUS GROQ:", resp.status)
+            print("ODPOWIEDŹ GROQ:", data)
 
-return data["choices"][0]["message"]["content"].strip()
+            if "choices" not in data:
+                raise Exception(f"Brak choices: {data}")
+
+            return data["choices"][0]["message"]["content"].strip()
 
 # Uruchomienie
 if __name__ == "__main__":
