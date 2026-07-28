@@ -104,7 +104,9 @@ async def generate_response(history):
     if not GROQ_API_KEY:
         raise Exception("Nie znaleziono GROQ_API_KEY")
 
-    messages = [{"role": "system", "content": SYSTEM_PROMPT}] + history
+    messages = [
+        {"role": "system", "content": SYSTEM_PROMPT}
+    ] + history
 
     headers = {
         "Authorization": f"Bearer {GROQ_API_KEY}",
@@ -117,6 +119,7 @@ async def generate_response(history):
         "temperature": 0.9,
         "max_tokens": 500
     }
+
     async with aiohttp.ClientSession() as session:
         async with session.post(
             "https://api.groq.com/openai/v1/chat/completions",
@@ -127,13 +130,15 @@ async def generate_response(history):
             data = await resp.json()
 
             print("STATUS GROQ:", resp.status)
-            print(data)
+            print("ODPOWIEDŹ GROQ:", data)
+
+            if resp.status != 200:
+                raise Exception(f"Groq error: {data}")
 
             if "choices" not in data:
-                raise Exception(data)
+                raise Exception(f"Brak choices: {data}")
 
-            return data["choices"][0]["message"]["content"]
-
+            return data["choices"][0]["message"]["content"].strip()
 # Uruchomienie
 if __name__ == "__main__":
     bot.run(TOKEN)
