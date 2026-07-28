@@ -117,7 +117,7 @@ async def on_message(message):
         history = conversation_history[channel_id]
 
 
-    async with message.channel.typing():
+async with message.channel.typing():
 
         try:
 
@@ -148,7 +148,6 @@ async def on_message(message):
 
 
 # ================== GROQ ==================
-
 
 async def generate_response(history):
 
