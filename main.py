@@ -117,7 +117,6 @@ async def on_message(message):
         history = conversation_history[channel_id]
 
     async with message.channel.typing():
-
         try:
 
             reply = await generate_response(history)
