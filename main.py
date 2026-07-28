@@ -116,7 +116,6 @@ async def on_message(message):
         conversation_history[channel_id] = history[-MAX_HISTORY:]
         history = conversation_history[channel_id]
 
-
     async with message.channel.typing():
 
         try:
