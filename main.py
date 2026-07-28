@@ -116,16 +116,17 @@ async def on_message(message):
         conversation_history[channel_id] = history[-MAX_HISTORY:]
         history = conversation_history[channel_id]
 
-    async with message.channel.typing():
-        try:
+    
+async with message.channel.typing():
+    try:
 
-            reply = await generate_response(history)
+        reply = await generate_response(history)
 
 
-            history.append({
-                "role": "assistant",
-                "content": reply
-            })
+        history.append({
+            "role": "assistant",
+            "content": reply
+          })
 
 
             if len(reply) > 2000:
